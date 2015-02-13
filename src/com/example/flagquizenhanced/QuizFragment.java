@@ -8,19 +8,17 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
-
-import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.DialogInterface;
-
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.AssetManager;
 import android.graphics.drawable.Drawable;
-
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -30,6 +28,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.webkit.WebView.FindListener;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -59,6 +58,7 @@ public class QuizFragment extends Fragment
    private LinearLayout[] guessLinearLayouts; // rows of answer Buttons
    private TextView answerTextView; // displays Correct! or Incorrect!
    private Button nextFlagButton;
+   private Button wikipediaButton;
  
    
    private int amountCorrectFirst = 0;
@@ -68,7 +68,8 @@ public class QuizFragment extends Fragment
    private int[] highscores = new int[6];
    
    // configures the QuizFragment when its View is created
-   @SuppressLint("TrulyRandom") @Override
+
+   @Override
    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
       super.onCreateView(inflater, container, savedInstanceState);    
       View view = inflater.inflate(R.layout.fragment_quiz, container, false);
@@ -92,6 +93,8 @@ public class QuizFragment extends Fragment
       answerTextView = (TextView) view.findViewById(R.id.answerTextView);
       nextFlagButton = (Button) view.findViewById(R.id.nextFlagButton);
       nextFlagButton.setOnClickListener(nextButtonListener);
+      wikipediaButton = (Button) view.findViewById(R.id.wikipediaButton);
+      wikipediaButton.setOnClickListener(wikipediaListener);
       
      
       
@@ -136,6 +139,15 @@ public class QuizFragment extends Fragment
   		}
    };
    
+   
+   private OnClickListener wikipediaListener = new OnClickListener() {
+ 		@Override
+    	public void onClick(View v) {
+ 			String urlString = "http://en.wikipedia.org/wiki/" + getCountryName(correctAnswer);
+ 			Intent webIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(urlString));
+ 			startActivity(webIntent);
+ 		}
+  };
 
    // update guessRows based on value in SharedPreferences
    public void updateGuessRows(SharedPreferences sharedPreferences) {
@@ -261,6 +273,7 @@ public class QuizFragment extends Fragment
       
       numberOfGuesses = 0;
       nextFlagButton.setEnabled(false);
+      wikipediaButton.setEnabled(false);
      
    } // end method loadNextFlag
 
@@ -334,6 +347,7 @@ public class QuizFragment extends Fragment
     				  public void run() {
     					  //loadNextFlag(null);
     					  nextFlagButton.setEnabled(true);
+    					  wikipediaButton.setEnabled(true);
     					 
     				  }
                   	}, 0); // 2000 milliseconds for 2-second delay

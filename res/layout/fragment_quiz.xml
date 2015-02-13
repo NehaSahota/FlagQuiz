@@ -121,12 +121,17 @@
 
     </LinearLayout>
 
-    <Button
-        android:id="@+id/nextFlagButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="@string/next_question" />
+   <Button
+            android:id="@+id/wikipediaButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/wikipedia" />
+
+        <Button
+            android:id="@+id/nextFlagButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/next_question" />
 
     <TextView
         android:id="@+id/answerTextView"
